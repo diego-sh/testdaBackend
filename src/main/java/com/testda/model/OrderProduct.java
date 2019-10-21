@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -39,6 +40,12 @@ public class OrderProduct {
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "ORD_ID", nullable = false)
 	private List<OrderDetail> detail;
+	
+	@Column(name = "CLI_ID", nullable = false)
+	private Integer idClient;
+	
+	@Transient
+	private Client client;
 
 	public Integer getId() {
 		return id;
@@ -63,6 +70,23 @@ public class OrderProduct {
 	public void setDetail(List<OrderDetail> detail) {
 		this.detail = detail;
 	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public Integer getIdClient() {
+		return idClient;
+	}
+
+	public void setIdClient(Integer idClient) {
+		this.idClient = idClient;
+	}
+	
 	
 	
 }

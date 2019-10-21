@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "client")
@@ -37,7 +38,8 @@ public class Client {
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "CLI_ID", nullable = true)
 	private List<OrderProduct> listOrder;
-
+	
+	
 	public Client() {};
 	
 	public Client(String ci, String name, String lastName, String email) {

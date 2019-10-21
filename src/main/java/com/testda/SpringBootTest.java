@@ -71,8 +71,8 @@ public class SpringBootTest {
 			List<OrderProduct> listOrder= new ArrayList<>();
 			
 			OrderDetail od = new OrderDetail();			
-			od.setArticle(listArticle.get(6));
-			od.setQuantity(1);
+			od.setArticle(listArticle.get(3));
+			od.setQuantity(2);
 			detail.add(od);
 			OrderDetail od2 = new OrderDetail();
 			od2.setArticle(listArticle.get(0));
