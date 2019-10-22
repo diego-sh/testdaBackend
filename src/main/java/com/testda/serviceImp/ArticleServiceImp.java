@@ -46,4 +46,12 @@ public class ArticleServiceImp implements IArticleService {
 		this.articleRepo.deleteById(id);
 	}
 
+	@Override
+	public Article controllerStock(Article article, Integer quantity) {
+		//Article foundArticle =this.findById(article);		
+		article.setStock(article.getStock()- quantity);
+		article = this.articleRepo.save(article);
+		return article;
+	}
+
 }

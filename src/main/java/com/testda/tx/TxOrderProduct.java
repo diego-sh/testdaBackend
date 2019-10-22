@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testda.model.Article;
 import com.testda.model.Client;
+import com.testda.model.OrderDetail;
 import com.testda.model.OrderProduct;
+import com.testda.service.IArticleService;
 import com.testda.service.IClientService;
 import com.testda.service.IOrderProductService;
 import com.testda.util.Crypto;
@@ -39,6 +41,9 @@ public class TxOrderProduct {
 	
 	@Autowired
 	private IClientService clientService;
+	
+	@Autowired
+	private IArticleService articleService;
 
 	/**
 	 * TX NAME: OrderSave: Guarda/actualiza la orden de los artículos
@@ -59,10 +64,20 @@ public class TxOrderProduct {
 			try {
 				OrderProduct order = JSON_MAPPER.readValue(jsonValue, OrderProduct.class);
 				order.setDate(LocalDate.now());
+				for(OrderDetail od: order.getDetail()) {
+					articleService.controllerStock(od.getArticle(), od.getQuantity());
+				}
 				order = this.orderProductService.create(order);
-
+				List<OrderProduct> lst= this.orderProductService.findAll();
+				for (OrderProduct op : lst) {
+					Client clienToFind=new Client();
+					clienToFind.setId(op.getIdClient());
+					clienToFind = this.clientService.findById(clienToFind);
+					clienToFind.setListOrder(null);
+					op.setClient(clienToFind);
+				}
 				if (order != null) {
-					String json = JSON_MAPPER.writeValueAsString(order);
+					String json = JSON_MAPPER.writeValueAsString(lst);
 					String jsonCryp = Crypto.encrypt(json);
 					wrei.setParameters(jsonCryp);
 					wrei.setStatus(WebResponseMessage.STATUS_OK);
